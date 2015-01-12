@@ -15,6 +15,7 @@ describe('does the module exist', function(){
 			scope = $rootScope.$new();
 			ctrl = $controller('search', {$scope: scope});
 			$httpBackend = _$httpBackend_;
+			authRequestHandler = $httpBackend.when('GET', '/auth.py')
 		}));
 
 		it("should be registered", function(){
@@ -34,13 +35,19 @@ describe('does the module exist', function(){
 				expect(scope.removeSpace(string)).toEqual('giorgiahello')
 			})
 
+            
+
 			it('searches for a song', function(){
 				expect(scope.activateSearch).not.toBeUndefined
 				var toSearchTemp = 'gior gia'
 				expect(scope.removeSpace(toSearchTemp)).toEqual('giorgia')
 				scope.songToSearch = scope.removeSpace(toSearchTemp)
-				// console.log(scGet + scope.songToSearch + limit)
-				$httpBackend.expectGET(scGet + scope.songToSearch + limit).respond({id:0, name: "iphone", assetTag:"a23456", owner:"qa", desc:"iOS4.3"})
+				console.log(scGet + scope.songToSearch + limit)
+				$httpBackend.expectGET(scGet + scope.songToSearch + limit).respond(200)
+				 // authRequestHandler.respond(404, '');
+				 // $httpBackend.expectGET('/auth.py');
+				 // $httpBackend.verifyNoOutstandingExpectation();
+
 
 
 			})
