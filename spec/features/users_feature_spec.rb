@@ -3,6 +3,9 @@ require_relative './helper.rb'
 
 feature 'user' do 
 
+
+
+
 	context 'user not signed in and on the home page' do
 
 		scenario 'should see sign in and sign up link' do
@@ -19,19 +22,43 @@ feature 'user' do
 
 	context 'user signed in on the homepage' do
 
-		scenario 'should see sign out link', js: true do
-			sign_up
-		  # element = find('#user_password_confirmation')
-		  # element.native.send_key(:Enter)
-			expect(current_path).to eq '/tracks'
-		end
-
-		scenario 'should not see a sign in and sign up link' do
+		scenario 'should see sign out link', :js => true do
 			visit '/'
-			expect(page).not_to have_link 'in'
-			expect(page).not_to have_link 'up'
+		  click_link 'up'
+		  fill_in 'Email', with: 'test@example.com'
+		  fill_in 'Password', with: 'testtest'
+		  fill_in 'Password confirmation', with:'testtest'
+		  keypress = "document.getElementById('new_user').submit();"
+		  page.driver.browser.execute_script(keypress)
+			expect(current_path).to eq '/'
+			expect(page).to have_content 'out'
 		end
 
+		scenario 'should not see a sign in and sign up link', :js => true do
+			visit '/'
+		  click_link 'up'
+		  fill_in 'Email', with: 'test@example.com'
+		  fill_in 'Password', with: 'testtest'
+		  fill_in 'Password confirmation', with:'testtest'
+		  keypress = "document.getElementById('new_user').submit();"
+		  page.driver.browser.execute_script(keypress)
+			expect(page).not_to have_link 'in'
+			expect(page).not_to have_link 'up'  
+		end
 	end
-	
+
+
 end
+
+# describe "Something" do
+#   it "uses javascript", :js => true do
+#      pending "write a test"
+#   end
+# end
+
+
+
+
+
+
+
